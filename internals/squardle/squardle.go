@@ -3,6 +3,7 @@ package squardle
 import (
 	"bufio"
 	"os"
+	"slices"
 	"strings"
 )
 
@@ -29,7 +30,7 @@ func GetFirstWordFromLine(line string) string {
 	return strings.Split(line, " ")[0]
 }
 
-func FilterWords(filename string, filter WordFilter, substring string) ([]string, error) {
+func FilterWordsBySubstring(filename string, filter WordFilter, substring string) ([]string, error) {
 	file, err := os.Open("NWL2020.txt")
 	if err != nil {
 		return []string{}, err
@@ -45,4 +46,24 @@ func FilterWords(filename string, filter WordFilter, substring string) ([]string
 		}
 	}
 	return words, nil
+}
+
+func FilterWordsByValidLetters(words []string, letters []byte) []string {
+	filteredWords := []string{}
+	for _, word := range words {
+		if WordContainsOnlyValidLetters(word, letters) {
+			filteredWords = append(filteredWords, word)
+		}
+	}
+	return filteredWords
+}
+
+func WordContainsOnlyValidLetters(word string, letters []byte) bool {
+	valid := true
+	for i := 0; i < len(word); i++ {
+		if !slices.Contains(letters, word[i]) {
+			valid = false
+		}
+	}
+	return valid
 }

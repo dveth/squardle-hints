@@ -102,7 +102,7 @@ func TestFilterWords(t *testing.T) {
 	want := []string{"beast", "beasts", "beastie", "beastly", "beasties", "beastings", "beastlier", "beastliest", "beastliness", "beastlinesses"}
 	substring := "beast"
 	filepath := "./NWL2020.txt"
-	got, err := squardle.FilterWords(filepath, squardle.WordBegins, substring)
+	got, err := squardle.FilterWordsBySubstring(filepath, squardle.WordBegins, substring)
 
 	if err != nil {
 		t.Fatalf("In FilterWords, got error: %s", err.Error())
@@ -114,7 +114,7 @@ func TestFilterWords(t *testing.T) {
 
 	substring = "dancing"
 	want = []string{"dancing", "outdancing", "ropedancing", "slamdancing", "breakdancing"}
-	got, err = squardle.FilterWords(filepath, squardle.WordEnds, substring)
+	got, err = squardle.FilterWordsBySubstring(filepath, squardle.WordEnds, substring)
 	if err != nil {
 		t.Fatalf("In FilterWords, got error: %s", err.Error())
 	}
@@ -126,7 +126,7 @@ func TestFilterWords(t *testing.T) {
 	substring = "verish"
 	want = []string{"feverish", "liverish", "cleverish", "feverishly", "impoverish", "feverishness", "impoverished", "impoverisher", "impoverishes", "liverishness",
 		"impoverishers", "impoverishing", "feverishnesses", "impoverishment", "liverishnesses", "impoverishments"}
-	got, err = squardle.FilterWords(filepath, strings.Contains, substring)
+	got, err = squardle.FilterWordsBySubstring(filepath, strings.Contains, substring)
 	if err != nil {
 		t.Fatalf("In FilterWords, got error: %s", err.Error())
 	}
@@ -134,4 +134,37 @@ func TestFilterWords(t *testing.T) {
 		t.Logf("Lengths: want %d, got %d\n", len(want), len(got))
 		t.Fatalf("In Filterwords, want %v, got %v, for WordContains and substring %s", want, got, substring)
 	}
+}
+
+func TestWordContainsOnlyValidLetters(t *testing.T) {
+	word := "anaconda"
+	letters := []byte{'a', 'n', 'c', 'd', 'o'}
+
+	want := true
+	got := squardle.WordContainsOnlyValidLetters(word, letters)
+
+	if want != got {
+		t.Fatalf("In WordcontainsOnlyValidLetters, wanted %v, got %v, with %s and %v", want, got, word, string(letters))
+	}
+
+	letters = []byte{'a', 'n'}
+	want = false
+	got = squardle.WordContainsOnlyValidLetters(word, letters)
+
+	if want != got {
+		t.Fatalf("In WordcontainsOnlyValidLetters, wanted %v, got %v, with %s and %v", want, got, word, string(letters))
+	}
+}
+
+func TestFilterWordsByValidLetters(t *testing.T) {
+	words := []string{"anaconda", "beast", "valid", "test", "golang"}
+	letters := []byte{'g', 'o', 'l', 'a', 'n', 'g', 't', 'e', 's'}
+
+	want := []string{"test", "golang"}
+	got := squardle.FilterWordsByValidLetters(words, letters)
+
+	if !slices.Equal(want, got) {
+		t.Fatalf("In FilterWordsByValidLetters, wanted %v, got %v, with %v and %v", want, got, words, string(letters))
+	}
+
 }
