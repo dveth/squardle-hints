@@ -1,7 +1,7 @@
 package main
 
-import "fmt"
+import "squardle-hints/internals/routes"
 
 func main() {
-	fmt.Println("Hello, world.")
+	routes.RouterStart()
 }
