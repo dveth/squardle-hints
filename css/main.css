@@ -1,0 +1,46 @@
+input[type="checkbox"] {
+  visibility: hidden;
+  height: 0em;
+  width: 0em;
+  padding: 0em;
+  margin: 0em;
+}
+
+#app {
+  padding: 10px;
+}
+
+form > div {
+  padding: 5px;
+  display: flex;
+}
+
+div > label {
+  border: 1px solid black;
+  padding: 1rem;
+}
+
+input[type="checkbox"]:checked + label {
+  font-weight: bold;
+  background-color: red;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333333;
+}
+
+li {
+  float: left;
+  color: white;
+  text-align: center;
+  padding: 16px;
+  text-decoration: none;
+}
+
+li:hover {
+  background-color: #111111;
+}

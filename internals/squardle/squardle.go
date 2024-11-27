@@ -30,7 +30,7 @@ func GetFirstWordFromLine(line string) string {
 	return strings.Split(line, " ")[0]
 }
 
-func FilterWordsBySubstring(filename string, filter WordFilter, substring string) ([]string, error) {
+func GetWordList(filename string) ([]string, error) {
 	file, err := os.Open("NWL2020.txt")
 	if err != nil {
 		return []string{}, err
@@ -41,11 +41,20 @@ func FilterWordsBySubstring(filename string, filter WordFilter, substring string
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		firstWord := strings.ToLower(GetFirstWordFromLine(scanner.Text()))
-		if filter(firstWord, substring) {
-			words = append(words, firstWord)
-		}
+		words = append(words, firstWord)
 	}
 	return words, nil
+}
+
+func FilterWordsBySubstring(words []string, filter WordFilter, substring string) []string {
+	filteredWords := []string{}
+	for _, word := range words {
+		firstWord := strings.ToLower(GetFirstWordFromLine(word))
+		if filter(firstWord, substring) {
+			filteredWords = append(filteredWords, firstWord)
+		}
+	}
+	return filteredWords
 }
 
 func FilterWordsByValidLetters(words []string, letters []byte) []string {
@@ -66,4 +75,14 @@ func WordContainsOnlyValidLetters(word string, letters []byte) bool {
 		}
 	}
 	return valid
+}
+
+func FilterWordsByLength(words []string, length int) []string {
+	filteredWords := []string{}
+	for _, word := range words {
+		if len(word) == length {
+			filteredWords = append(filteredWords, word)
+		}
+	}
+	return filteredWords
 }

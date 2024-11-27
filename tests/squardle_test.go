@@ -101,12 +101,12 @@ func TestGetFirstWordFromLine(t *testing.T) {
 func TestFilterWords(t *testing.T) {
 	want := []string{"beast", "beasts", "beastie", "beastly", "beasties", "beastings", "beastlier", "beastliest", "beastliness", "beastlinesses"}
 	substring := "beast"
-	filepath := "./NWL2020.txt"
-	got, err := squardle.FilterWordsBySubstring(filepath, squardle.WordBegins, substring)
-
+	filename := "NWL2020.txt"
+	words, err := squardle.GetWordList(filename)
 	if err != nil {
-		t.Fatalf("In FilterWords, got error: %s", err.Error())
+		t.Fatalf("In GetWordList, got error: %s", err.Error())
 	}
+	got := squardle.FilterWordsBySubstring(words, squardle.WordBegins, substring)
 	if !slices.Equal(want, got) {
 		t.Logf("Lengths: want %d, got %d\n", len(want), len(got))
 		t.Fatalf("In Filterwords, want %v, got %v, for WordBegins and substring %s", want, got, substring)
@@ -114,10 +114,7 @@ func TestFilterWords(t *testing.T) {
 
 	substring = "dancing"
 	want = []string{"dancing", "outdancing", "ropedancing", "slamdancing", "breakdancing"}
-	got, err = squardle.FilterWordsBySubstring(filepath, squardle.WordEnds, substring)
-	if err != nil {
-		t.Fatalf("In FilterWords, got error: %s", err.Error())
-	}
+	got = squardle.FilterWordsBySubstring(words, squardle.WordEnds, substring)
 	if !slices.Equal(want, got) {
 		t.Logf("Lengths: want %d, got %d\n", len(want), len(got))
 		t.Fatalf("In Filterwords, want %v, got %v, for WordEnds and substring %s", want, got, substring)
@@ -126,10 +123,7 @@ func TestFilterWords(t *testing.T) {
 	substring = "verish"
 	want = []string{"feverish", "liverish", "cleverish", "feverishly", "impoverish", "feverishness", "impoverished", "impoverisher", "impoverishes", "liverishness",
 		"impoverishers", "impoverishing", "feverishnesses", "impoverishment", "liverishnesses", "impoverishments"}
-	got, err = squardle.FilterWordsBySubstring(filepath, strings.Contains, substring)
-	if err != nil {
-		t.Fatalf("In FilterWords, got error: %s", err.Error())
-	}
+	got = squardle.FilterWordsBySubstring(words, strings.Contains, substring)
 	if !slices.Equal(want, got) {
 		t.Logf("Lengths: want %d, got %d\n", len(want), len(got))
 		t.Fatalf("In Filterwords, want %v, got %v, for WordContains and substring %s", want, got, substring)
@@ -167,4 +161,15 @@ func TestFilterWordsByValidLetters(t *testing.T) {
 		t.Fatalf("In FilterWordsByValidLetters, wanted %v, got %v, with %v and %v", want, got, words, string(letters))
 	}
 
+}
+
+func TestFilterWordsByLength(t *testing.T) {
+	words := []string{"anaconda", "beast", "valid", "test", "golang"}
+	length := 5
+
+	want := []string{"beast", "valid"}
+	got := squardle.FilterWordsByLength(words, length)
+	if !slices.Equal(want, got) {
+		t.Fatalf("In FilterWordsByLength, wanted %v, got %v, with %v and %d", want, got, words, length)
+	}
 }

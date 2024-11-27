@@ -1,0 +1,46 @@
+{{ block "squardle" . }}
+<form hx-post="/wordlist" hx-target="#wordlist" hx-swap="innerHTML" id="squardleForm">
+	<label for="wordBeginning">Word Beginning:</label>
+	<input name="wordBeginning" type="text" id="wordBeginning" />
+	<label for="wordContains">Word Contains:</label>
+	<input name="wordContains" type="text" id="wordContains" />
+	<label for="wordEnds">Word Ends:</label>
+	<input name="wordEnds" type="text" id="wordEnds" />
+	<label for="wordLength">Word Length:</label>
+	<input name="wordLength" type="number" min="4" id="wordLength" value="4" />
+	{{ template "letters" . }}
+	<input id="formsubmit" type="submit" value="Submit" />
+</form>
+<div id="wordlist"></div>
+<!--
+<script>
+        const form = document.querySelector("form");
+
+        // Prevent form submission on button click
+        document
+            .getElementById("formsubmit")
+            .addEventListener("click", function (event) {
+                event.preventDefault();
+            });
+    </script>
+-->
+{{ end }}
+
+{{ block "letters" . }}
+<div id="letters">
+{{ range .Letters}}
+{{ template "letter" . }}
+{{ end }}
+</div>
+{{ end }}
+
+{{ block "letter" . }}
+<input checked type="checkbox" id="{{ . }}-checkbox" value="{{ . }}" name="{{ . }}" />
+<label for="{{ . }}-checkbox">{{ . }}</label>
+{{ end }}
+
+{{ block "words" . }}
+{{ range .Words }}
+<span> {{ . }} </span>
+{{ end }}
+{{ end }}

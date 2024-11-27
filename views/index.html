@@ -2,8 +2,10 @@
 <!DOCTYPE html>
 <head>
 	<title>{{ .PageTitle }}</title>
+  <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-	<p>Hello, world!</p>
+	{{ template "squardle" . }}
 </body>
 {{ end}}
