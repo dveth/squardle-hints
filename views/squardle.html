@@ -8,6 +8,8 @@
 	<input name="wordEnds" type="text" id="wordEnds" />
 	<label for="wordLength">Word Length:</label>
 	<input name="wordLength" type="number" min="4" id="wordLength" value="4" />
+	<label for="checkWordLength">Check Word Length?</label>
+	<input name="checkWordLength" type="checkbox" value="checkWordLength" />
 	{{ template "letters" . }}
 	<input id="formsubmit" type="submit" value="Submit" />
 </form>
@@ -35,7 +37,7 @@
 {{ end }}
 
 {{ block "letter" . }}
-<input checked type="checkbox" id="{{ . }}-checkbox" value="{{ . }}" name="{{ . }}" />
+<input class = "letterCheckbox" checked type="checkbox" id="{{ . }}-checkbox" value="{{ . }}" name="{{ . }}" />
 <label for="{{ . }}-checkbox">{{ . }}</label>
 {{ end }}
 

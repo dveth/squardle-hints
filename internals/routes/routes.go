@@ -56,6 +56,10 @@ func squardleHandler(c echo.Context) error {
 	wordBeginsSubstring := c.FormValue("wordBeginning")
 	wordContainsSubstring := c.FormValue("wordContains")
 	wordEndsSubstring := c.FormValue("wordEnds")
+	checkWordLength := false
+	if c.FormValue("checkWordLength") == "checkWordLength" {
+		checkWordLength = true
+	}
 	wordLength, err := strconv.Atoi(c.FormValue("wordLength"))
 
 	if err != nil {
@@ -76,7 +80,7 @@ func squardleHandler(c echo.Context) error {
 		wordList = squardle.FilterWordsBySubstring(wordList, squardle.WordEnds, wordEndsSubstring)
 	}
 	wordList = squardle.FilterWordsByValidLetters(wordList, []byte(validLetters))
-	if wordLength != 0 {
+	if checkWordLength {
 		wordList = squardle.FilterWordsByLength(wordList, wordLength)
 	}
 	data.Words = wordList
